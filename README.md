@@ -38,7 +38,5 @@ Yes.
 
 ## Licence
 
-The word list: CC BY 3.0 US 2016 Electronic Frontier Foundation
-https://www.eff.org/deeplinks/2016/07/new-wordlists-random-passphrases
+This code is licensed under the terms of the MIT licence (see LICENCE for details).
 
-This code is licensed under MIT licence (see LICENCE for details).
