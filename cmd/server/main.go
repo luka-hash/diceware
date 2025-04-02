@@ -1,45 +1,47 @@
+// Copyright © 2023-2025 Luka Ivanović
+// This code is licensed under the terms of the MIT licence (see LICENCE for details)
+
 package main
 
 import (
 	"fmt"
-	"math"
-	"math/rand"
 	"net/http"
+	"os"
 	"strconv"
 	"strings"
+
+	"github.com/luka-hash/diceware/pkg/diceware"
 )
 
 func main() {
 	mux := http.NewServeMux()
-	mux.HandleFunc("GET /{length}/", func(w http.ResponseWriter, r *http.Request) {
-		length, err := strconv.Atoi(r.PathValue("length"))
-		if err != nil {
-			fmt.Fprint(w, "error")
-			return
-		}
-		if length < 0 {
-			length = 8
-		}
-		if length > 255 {
-			length = 255
-		}
-		passphrase := make([]string, length)
-		for i := 0; i < length; i += 1 {
-			passphrase[i] = words[rollDices()]
-		}
-		fmt.Fprint(w, strings.Join(passphrase, "-"))
-	})
-	http.ListenAndServe(":8000", mux)
-}
+	mux.HandleFunc("GET /", HandleNewPassphrase)
+	mux.HandleFunc("GET /{length}", HandleNewPassphraseWithLength)
 
-func rollDice() int {
-	return rand.Intn(6) + 1
-}
-
-func rollDices() int {
-	result := 0
-	for i := 0; i < 5; i += 1 {
-		result += rollDice() * (int(math.Pow10(5 - i - 1)))
+	port := os.Getenv("DICEWARE_PORT")
+	if port == "" {
+		port = "8000"
 	}
-	return result
+	fmt.Printf("Listening on localhost:%s\n", port)
+	if err := http.ListenAndServe(":"+port, mux); err != nil {
+		fmt.Println("Error starting server:", err)
+		os.Exit(1)
+	}
+}
+
+func HandleNewPassphrase(w http.ResponseWriter, r *http.Request) {
+	passphrase := diceware.NewPassphrase()
+	w.Header().Set("Content-Type", "text/plain")
+	fmt.Fprint(w, strings.ReplaceAll(passphrase, " ", "-"))
+}
+
+func HandleNewPassphraseWithLength(w http.ResponseWriter, r *http.Request) {
+	length, err := strconv.Atoi(r.PathValue("length"))
+	if err != nil || length < 1 || length > 256 {
+		http.Error(w, "Invalid length", http.StatusBadRequest)
+		return
+	}
+	passphrase := diceware.NewPassphraseWithLength(length)
+	w.Header().Set("Content-Type", "text/plain")
+	fmt.Fprint(w, strings.ReplaceAll(passphrase, " ", "-"))
 }
