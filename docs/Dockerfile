@@ -1,10 +1,12 @@
-from golang:1.23 as builder
-env CGO_ENABLED=0
-copy go.mod ./
-copy main.go ./
-copy wordlist.go ./
-run go build -o /bin/diceware ./
+FROM golang:1.24-alpine as build
+ENV CGO_ENABLED=0
+WORKDIR /app
+COPY . .
+RUN go mod tidy
+RUN go build -o /bin/diceware ./cmd/server/
 
-from scratch 
-copy --from=builder /bin/diceware /bin/diceware
-cmd ["/bin/diceware"]
+FROM scratch
+ENV DICEWARE_PORT=8000
+COPY --from=build /bin/diceware /bin/diceware
+EXPOSE ${DICEWARE_PORT}
+CMD ["/bin/diceware"]

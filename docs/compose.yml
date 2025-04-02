@@ -1,0 +1,10 @@
+services:
+  diceware:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      - DICEWARE_PORT=${DICEWARE_PORT:-8000}
+    ports:
+      - "${DICEWARE_PORT:-8000}:${DICEWARE_PORT:-8000}"
+    restart: unless-stopped
