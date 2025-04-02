@@ -1,7 +1,7 @@
 // Copyright © 2023- Luka Ivanović
 // This code is licensed under the terms of the MIT licence (see LICENCE for details)
 
-package main
+package diceware
 
 var words map[int]string = map[int]string{
 	11111: "abacus",
