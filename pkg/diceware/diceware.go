@@ -1,3 +1,6 @@
+// Copyright © 2023-2025 Luka Ivanović
+// This code is licensed under the terms of the MIT licence (see LICENCE for details)
+
 package diceware
 
 import (

@@ -7,6 +7,8 @@ import (
 	"fmt"
 	"os"
 	"strconv"
+
+	"github.com/luka-hash/diceware/pkg/diceware"
 )
 
 func main() {
@@ -26,7 +28,7 @@ func main() {
 			// "Invalid argument: An incorrect or missing argument was provided to the script."
 		}
 	}
-	fmt.Println(NewPassphraseWithLength(length))
+	fmt.Println(diceware.NewPassphraseWithLength(length))
 }
 
 func printUsage() {
