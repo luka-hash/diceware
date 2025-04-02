@@ -33,10 +33,8 @@ make install DESTDIR="$pkgdir" PREFIX=/usr on Arch.
 Yes.
 
 ## TODO
-- [x] embed wordlist into a program
 - [ ] create non-english wordlist and add a flag to switch the wordlist
 
 ## Licence
 
 This code is licensed under the terms of the MIT licence (see LICENCE for details).
-
