@@ -22,7 +22,7 @@ func main() {
 	if len(args) == 1 {
 		var err error
 		length, err = strconv.Atoi(args[0])
-		if err != nil {
+		if err != nil || length < 1 || length > 256 {
 			printUsage()
 			os.Exit(3)
 			// "Invalid argument: An incorrect or missing argument was provided to the script."
